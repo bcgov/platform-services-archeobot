@@ -1,0 +1,26 @@
+# permissions for end users to edit artifactoryserviceaccounts.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: svcacct-editor-role
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.devops.gov.bc.ca/aggregate-to-art-objects: "true"
+rules:
+- apiGroups:
+  - artifactory.devops.gov.bc.ca
+  resources:
+  - artifactoryserviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - artifactory.devops.gov.bc.ca
+  resources:
+  - artifactoryserviceaccounts/status
+  verbs:
+  - get

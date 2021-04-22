@@ -1,0 +1,10 @@
+# permissions for platform-services team to edit archeobot objects.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: object-admin-role
+aggregationRule:
+  clusterRoleSelectors:
+  - matchLabels:
+      rbac.devops.gov.bc.ca/aggregate-to-art-objects: "true"
+rules: []

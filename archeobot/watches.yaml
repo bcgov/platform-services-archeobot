@@ -1,0 +1,17 @@
+---
+# Use the 'create api' subcommand to add watches to this file.
+- version: v1alpha1
+  group: artifactory.devops.gov.bc.ca
+  kind: ArtifactoryRepository
+  playbook: playbooks/artrepository-main.yml
+  finalizer:
+    name: finalrepo.artifactory.devops.gov.bc.ca
+    playbook: playbooks/artrepository-destroy.yml
+- version: v1alpha1
+  group: artifactory.devops.gov.bc.ca
+  kind: ArtifactoryServiceAccount
+  playbook: playbooks/artserviceacct-main.yml
+  finalizer:
+    name: finalsvcacct.artifactory.devops.gov.bc.ca
+    playbook: playbooks/artserviceacct-destroy.yml
+#+kubebuilder:scaffold:watch

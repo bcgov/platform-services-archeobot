@@ -1,0 +1,12 @@
+resources:
+- role.yaml
+- role_binding.yaml
+- leader_election_role.yaml
+- leader_election_role_binding.yaml
+# Custom Roles
+- svcacct_viewer_role.yaml
+- svcacct_editor_role.yaml
+- repo_viewer_role.yaml
+- repo_editor_role.yaml
+# Rollups
+- object_admin_role.yaml

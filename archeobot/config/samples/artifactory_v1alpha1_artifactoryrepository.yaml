@@ -1,0 +1,9 @@
+apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+kind: ArtifactoryRepository
+metadata:
+  name: bar-docker-local-sample
+spec:
+  team_name: bar
+  repository_type: docker
+  repository_locator: local
+  repository_description: "bar local docker repo"
