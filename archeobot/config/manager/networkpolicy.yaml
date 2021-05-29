@@ -5,7 +5,7 @@ metadata:
   name: intra-ns
   namespace: system
 spec:
-  podSelector:
+  podSelector: {}
   ingress:
   - from:
     - podSelector: {}

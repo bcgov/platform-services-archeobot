@@ -32,7 +32,6 @@ spec:
               value: explicit
             - name: ARTIFACTORY_BASE_DNS
               value: artifactory-service
-            - name
           image: controller:latest
           livenessProbe:
             httpGet:

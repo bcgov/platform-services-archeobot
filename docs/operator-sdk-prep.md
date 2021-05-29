@@ -32,4 +32,3 @@ Inside the directory, run the following command to prep your local development p
 ansible-galaxy collection install -r requirements.yml
 ```
 
-

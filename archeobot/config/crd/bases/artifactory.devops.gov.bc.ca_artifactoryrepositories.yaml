@@ -12,6 +12,7 @@ spec:
     singular: artifactoryrepository
     shortNames:
       - artrepo
+      - artrepos
   scope: Namespaced
   versions:
   - name: v1alpha1

@@ -11,7 +11,7 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryserviceaccounts
+  - ArtifactoryServiceAccount
   verbs:
   - create
   - delete

@@ -29,7 +29,9 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 BUNDLE_IMG ?= controller-bundle:$(VERSION)
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= archeobot:latest
+REGISTRY ?= image-registry.apps.klab.devops.gov.bc.ca
+NAMESPACE ?= devops-artifactory
 
 all: docker-build
 
@@ -47,7 +49,7 @@ uninstall: kustomize
 
 # Deploy controller in the configured Kubernetes cluster in ~/.kube/config
 deploy: kustomize
-	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
 # Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
@@ -56,11 +58,13 @@ undeploy: kustomize
 
 # Build the docker image
 docker-build:
-	docker build -t ${IMG} .
+	docker login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
+	docker build -t ${REGISTRY}/${NAMESPACE}/${IMG} .
 
 # Push the docker image
 docker-push:
-	docker push ${IMG}
+	docker login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
+	docker push ${REGISTRY}/${NAMESPACE}/${IMG}
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/')

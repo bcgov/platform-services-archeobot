@@ -12,7 +12,7 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryrepositories
+  - ArtifactoryRepository
   verbs:
   - get
   - list
