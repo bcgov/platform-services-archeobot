@@ -1,0 +1,25 @@
+# permissions for end users to view artifactoryrepositories.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: repo-viewer-role
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+    rbac.authorization.k8s.io/aggregate-to-cluster-reader: "true"
+rules:
+- apiGroups:
+  - artifactory.devops.gov.bc.ca
+  resources:
+  - ArtifactoryRepository
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - artifactory.devops.gov.bc.ca
+  resources:
+  - artifactoryrepositories/status
+  verbs:
+  - get

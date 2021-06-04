@@ -1,0 +1,56 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  ##
+  ## Operator Cluster RBAC requirements
+  ##
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryServiceAccount
+  ##
+  - apiGroups:
+      - artifactory.devops.gov.bc.ca
+    resources:
+      - artifactoryserviceaccounts
+      - artifactoryserviceaccounts/status
+      - artifactoryserviceaccounts/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryRepository
+  ##
+  - apiGroups:
+      - artifactory.devops.gov.bc.ca
+    resources:
+      - artifactoryrepositories
+      - artifactoryrepositories/status
+      - artifactoryrepositories/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+#+kubebuilder:scaffold:rules

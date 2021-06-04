@@ -1,0 +1,5 @@
+## Append samples you want in your CSV to this file as resources ##
+resources:
+- artifactory_v1alpha1_artifactoryserviceaccount.yaml
+- artifactory_v1alpha1_artifactoryrepository.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

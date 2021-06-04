@@ -1,0 +1,113 @@
+<mxfile host="65bd71144e" pages="2">
+    <diagram id="TDpILnXQcABXqqiqFEOc" name="Ops Plans">
+        <mxGraphModel dx="712" dy="487" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-0"/>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-1" parent="JuxyXrgx4bHX3fEBk6Y7-0"/>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-17" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="380" y="50" width="430" height="230" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-16" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;labelBackgroundColor=none;fillColor=#dae8fc;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="40" y="50" width="320" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-2" value="Dockerhub Cluster Default&lt;br&gt;(#1126)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="60" y="70" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-3" value="Artifactory Cluster Default (https://artifacts.developer.gov.bc.ca)&lt;br&gt;(optional Step 2 of #1126)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="80" y="130" width="220" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-4" value="https://docker-remote.artifacts.dev.gov.bc.ca&lt;br&gt;https://redhat-docker-remote.artifacts.dev.gov.bc.ca" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="454" y="180" width="330" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-5" value="Breaking Change&lt;br&gt;(requires change management)&lt;br&gt;- Switch to path based routes&lt;br&gt;Ticket #1137" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="400" y="70" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-7" value="Artifactory cluster default works without additional config" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="120" y="220" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-9" value="Create Caddy/NGINX proxy for container subdomain URLs" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="440" y="130" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-2" value="" style="group" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1" connectable="0">
+                    <mxGeometry x="60" y="410" width="430" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="L7jFtRoRRPTNu0szMWka-1" value="" style="group" parent="Yyt11t-85TRaqVePR78H-2" vertex="1" connectable="0">
+                    <mxGeometry x="-20" y="-20" width="450" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="L7jFtRoRRPTNu0szMWka-0" value="" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=#82b366;fillColor=#d5e8d4;" parent="L7jFtRoRRPTNu0szMWka-1" vertex="1">
+                    <mxGeometry width="450" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-11" value="Remove ArtifactorySA CRs from projectProvisioner&lt;br&gt;(#1138)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#000000;" parent="L7jFtRoRRPTNu0szMWka-1" vertex="1">
+                    <mxGeometry x="20" y="20" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-10" value="Teams with external build pipelines will need new artifactory svc accounts&lt;br&gt;(if our licenses support it - builds on non-RH servers are NOT supported through our license)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#000000;" parent="L7jFtRoRRPTNu0szMWka-1" vertex="1">
+                    <mxGeometry x="166" y="70" width="254" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-3" value="Archeobot MultiCluster support" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="600" y="390" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-4" value="" style="endArrow=classic;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" parent="JuxyXrgx4bHX3fEBk6Y7-1" source="JuxyXrgx4bHX3fEBk6Y7-16" target="Yyt11t-85TRaqVePR78H-3" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="290" y="310" as="sourcePoint"/>
+                        <mxPoint x="220" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-5" value="Required" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Yyt11t-85TRaqVePR78H-4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.14" y="-4" relative="1" as="geometry">
+                        <mxPoint x="87" y="35" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-7" value="" style="endArrow=classic;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" parent="JuxyXrgx4bHX3fEBk6Y7-1" source="JuxyXrgx4bHX3fEBk6Y7-17" target="Yyt11t-85TRaqVePR78H-3" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="497.5" y="290" as="sourcePoint"/>
+                        <mxPoint x="220" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-8" value="Required" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Yyt11t-85TRaqVePR78H-7" vertex="1" connectable="0">
+                    <mxGeometry x="-0.2653" y="-1" relative="1" as="geometry">
+                        <mxPoint x="1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-9" value="Archeobot CCM integration" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="520" y="520" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-11" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="JuxyXrgx4bHX3fEBk6Y7-1" source="Yyt11t-85TRaqVePR78H-3" target="Yyt11t-85TRaqVePR78H-9" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="290" y="310" as="sourcePoint"/>
+                        <mxPoint x="220" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-12" value="Required" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Yyt11t-85TRaqVePR78H-11" vertex="1" connectable="0">
+                    <mxGeometry x="-0.14" y="-4" relative="1" as="geometry">
+                        <mxPoint y="-1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-13" value="Archeobot Image Build Pipeline" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#9673a6;fillColor=#e1d5e7;" parent="JuxyXrgx4bHX3fEBk6Y7-1" vertex="1">
+                    <mxGeometry x="680" y="520" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-18" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" parent="JuxyXrgx4bHX3fEBk6Y7-1" source="JuxyXrgx4bHX3fEBk6Y7-17" target="JuxyXrgx4bHX3fEBk6Y7-11" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="390" y="270" as="sourcePoint"/>
+                        <mxPoint x="440" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-1" value="Required" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="JuxyXrgx4bHX3fEBk6Y7-18" vertex="1" connectable="0">
+                    <mxGeometry x="-0.2653" y="-1" relative="1" as="geometry">
+                        <mxPoint x="-75" y="40" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="JuxyXrgx4bHX3fEBk6Y7-15" value="" style="endArrow=classic;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="JuxyXrgx4bHX3fEBk6Y7-1" source="JuxyXrgx4bHX3fEBk6Y7-16" target="JuxyXrgx4bHX3fEBk6Y7-11" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="420" as="sourcePoint"/>
+                        <mxPoint x="220" y="370" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Yyt11t-85TRaqVePR78H-0" value="Required" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="JuxyXrgx4bHX3fEBk6Y7-15" vertex="1" connectable="0">
+                    <mxGeometry x="-0.14" y="-4" relative="1" as="geometry">
+                        <mxPoint y="-1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

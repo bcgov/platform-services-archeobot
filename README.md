@@ -1,20 +1,16 @@
-# Application Name
+# Archeobot
 
-## What am I?
+Archeobot is an operator which provisions Artifactory resources and service elements. It currently provisions service accounts, with private repositories to be added very soon.
 
-I am a template repo for use by the platform services team to encourage consistency in documentation and repo layout. For those using me, do not feel like you are *required* to adhere to this layout if you feel something better would suit the needs of your application or service. Find more information about this template [here](https://github.com/bcgov-c/platform-services-docs/blob/main/repo-organization.md)
-
-Please use this README as a template for your own README, including all the same information, as appropriate.
-
-Consider including your namespace name(s) in this section, so others supporting this tool know where to look.
+Currently, Archeobot lives alongside Artifactory in `devops-artifactory` on the Silver cluster, but will soon live in its own (to be named) namespace on every cluster!
 
 ## Contact Info
 
-Relevant rocketchat channels, maybe some outside docs, vendor support portals, etc.
+Support for Artifactory and the Archeobot is provided primarily through the `#artifactory` [Rocket.Chat](https://chat.developer.gov.bc.ca) channel!
 
-## Vendor Info
+## Relevant Links
 
-If this is a deployment of a vendored product, include some links to relevant repos and documentation.
+If you're looking for more information on Artifactory, check out the [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory) and 
 
 ## Repo Overview
 

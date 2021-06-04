@@ -1,0 +1,9 @@
+resources:
+- manager.yaml
+- networkpolicy.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: controller
+  newName: image-registry.apps.klab.devops.gov.bc.ca/devops-artifactory/archeobot
+  newTag: latest
