@@ -1,0 +1,25 @@
+---
+- hosts:        localhost
+  gather_facts: no
+  collections:
+    - community.kubernetes
+    - operator_sdk.util
+
+  tasks:
+
+  - name: Check artifactory user
+    uri:
+      url: "https://artifacts.apps.klab.devops.gov.bc.ca/artifactory/api/security/users/test1"
+      user: "admin"
+      password: "8FEiW44h7V6IpjyS6wiQcJ6PC7s2ko"
+      method: GET
+      body_format: json
+      headers:
+        Content-type: "application/json"
+      force_basic_auth: yes
+      status_code: 200,404
+    register: sa_exists
+
+  - name: "No Action Required"
+    debug:
+      msg: "{{ sa_exists.status }}"

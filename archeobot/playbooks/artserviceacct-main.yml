@@ -1,9 +1,9 @@
 ---
 - hosts:        localhost
   gather_facts: no
-  collections:
-    - community.kubernetes
-    - operator_sdk.util
+#  collections:
+#    - community.kubernetes
+#    - operator_sdk.util
   
   tasks:
     - name: Setup Testing Variables
@@ -25,7 +25,6 @@
     
     - import_role:
         name: "artifactory_serviceacct"
-      when: (sa_name is defined) and (sa_name|length > 0)
   
     - name: Update CR ServiceAccount detail
       k8s:

@@ -47,14 +47,23 @@ install: kustomize
 uninstall: kustomize
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+# Deploy cluster stuff
+cluster-deploy: kustomize
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
+	$(KUSTOMIZE) build config/cluster | kubectl apply -f -
+
+# Undeploy cluster stuff
+cluster-undeploy: kustomize
+	$(KUSTOMIZE) build config/cluster | kubectl delete -f -
+
+# Deploy controller only
 deploy: kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
-	$(KUSTOMIZE) build config/default | kubectl apply -f -
+	$(KUSTOMIZE) build config/deploy | kubectl apply -f -
 
-# Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
+# Undeploy controller only
 undeploy: kustomize
-	$(KUSTOMIZE) build config/default | kubectl delete -f -
+	$(KUSTOMIZE) build config/deploy | kubectl delete -f -
 
 # Build the docker image
 docker-build:
