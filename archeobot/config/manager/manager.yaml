@@ -35,9 +35,7 @@ spec:
             - name: ARTIFACTORY_BASE_DNS
               value: "apps.klab.devops.gov.bc.ca"
             - name: ARTIFACTORY_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              value: "artifacts.apps.klab.devops.gov.bc.ca"
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:

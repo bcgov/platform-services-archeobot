@@ -31,7 +31,7 @@ BUNDLE_IMG ?= controller-bundle:$(VERSION)
 # Image URL to use all building/pushing image targets
 IMG ?= archeobot:latest
 REGISTRY ?= image-registry.apps.klab.devops.gov.bc.ca
-NAMESPACE ?= devops-artifactory
+NAMESPACE ?= devops-archeobot
 
 all: docker-build
 
@@ -39,13 +39,13 @@ all: docker-build
 run: ansible-operator
 	$(ANSIBLE_OPERATOR) run
 
-# Install CRDs into a cluster
-install: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl apply -f -
-
-# Uninstall CRDs from a cluster
-uninstall: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+# # Install CRDs into a cluster
+# install: kustomize
+# 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+#
+# # Uninstall CRDs from a cluster
+# uninstall: kustomize
+# 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
 # Deploy cluster stuff
 cluster-deploy: kustomize

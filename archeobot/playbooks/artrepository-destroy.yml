@@ -1,9 +1,11 @@
 ---
 - hosts:        localhost
   gather_facts: no
-  collections:
-    - community.kubernetes
-    - operator_sdk.util
+  vars:
+    meta: '{{ ansible_operator_meta }}'
+#  collections:
+#    - community.kubernetes
+#    - operator_sdk.util
   
   tasks:
     - name: Setup Testing Variables
@@ -14,12 +16,11 @@
       set_fact:
         admin_user: "admin"
         admin_pass_loc: "{{ testPass | default('/tmp/ansible-operator/admin/password') }}"
-        artifactory_namespace: "{{ lookup('env', 'ARTIFACTORY_NAMESPACE')}}"
+        artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
         project_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
 
     - name: Set calculated variables
       set_fact:
-        artifactory_url: "{{ test_url | default('http://artifactory-ha.{{ artifactory_namespace }}.svc.cluster.local:8081') }}"
         service_account_name: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
 
     - name: Delete artifactory user

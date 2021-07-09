@@ -1,6 +1,8 @@
 ---
 - hosts:        localhost
   gather_facts: no
+  vars:
+    meta: '{{ ansible_operator_meta }}'
 #  collections:
 #    - community.kubernetes
 #    - operator_sdk.util
@@ -13,15 +15,13 @@
     - name: Set CR Variables
       set_fact:
         admin_pass_loc: "{{ testPass | default('/tmp/ansible-operator/admin/password') }}"
-        artifactory_namespace: "{{ lookup('env', 'ARTIFACTORY_NAMESPACE')}}"
+        artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
         project_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
         license_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
 
     - name: Set Art URL and SA name
       set_fact:
-        artifactory_url: "{{ test_url | default('http://artifactory-ha.{{ artifactory_namespace }}.svc.cluster.local:8081') }}"
         service_account_name: "{{ sa_name | default('{{ meta.name }}-{{ project_plate }}-{{ license_plate }}', true) }}"
-        generated_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
     
     - import_role:
         name: "artifactory_serviceacct"
