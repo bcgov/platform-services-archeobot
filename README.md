@@ -10,7 +10,7 @@ Support for Artifactory and the Archeobot is provided primarily through the `#ar
 
 ## Relevant Links
 
-If you're looking for more information on Artifactory, check out the [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory) and 
+If you're looking for more information on Artifactory, check out the [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory).
 
 ## Repo Overview
 
