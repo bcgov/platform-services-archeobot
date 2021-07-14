@@ -34,8 +34,8 @@ spec:
               value: explicit
             - name: ARTIFACTORY_BASE_DNS
               value: "apps.klab.devops.gov.bc.ca"
-            - name: ARTIFACTORY_NAMESPACE
-              value: "artifacts.apps.klab.devops.gov.bc.ca"
+            - name: ARTIFACTORY_URL
+              value: "https://artifacts.apps.klab.devops.gov.bc.ca"
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:

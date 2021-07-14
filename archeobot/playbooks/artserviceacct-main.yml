@@ -22,6 +22,7 @@
     - name: Set Art URL and SA name
       set_fact:
         service_account_name: "{{ sa_name | default('{{ meta.name }}-{{ project_plate }}-{{ license_plate }}', true) }}"
+        generated_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
     
     - import_role:
         name: "artifactory_serviceacct"
