@@ -18,17 +18,15 @@ spec:
       containers:
         - name: manager
           args:
-            - "--enable-leader-election"
+            - "--leader-elect"
             - "--leader-election-id=archeobot"
+            - "--max-concurrent-reconciles=10"
           volumeMounts:
             - mountPath: /tmp/ansible-operator/admin/
               name: artifactory-secret
               readOnly: true
             - mountPath: /tmp/ansible-operator/runner
               name: runner
-#            - mountPath: /tmp/ansible-operator/cert/
-#              name: artifactory-cert
-#              readOnly: true
           env:
             - name: ANSIBLE_GATHERING
               value: explicit
@@ -41,8 +39,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: OPERATOR_NAME
-              value: archeobot
             - name: ANSIBLE_DEBUG_LOGS
               value: "False"
           image: controller:latest
@@ -65,6 +61,3 @@ spec:
         - name: artifactory-secret
           secret:
             secretName: artifactory-ha-admin
-#        - name: artifactory-cert
-#          secret:
-#            secretName: artifactory-docker-secret
