@@ -1,5 +1,7 @@
 # Archeobot
 
+[![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](<Redirect-URL>)
+
 Archeobot is an operator which provisions Artifactory resources and service elements. It currently provisions service accounts, with private repositories to be added very soon.
 
 Currently, Archeobot lives alongside Artifactory in `devops-artifactory` on the Silver cluster, but will soon live in its own (to be named) namespace on every cluster!
