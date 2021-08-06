@@ -1,5 +1,7 @@
 # Archeobot
 
+![Lifecycle:Maturing](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)
+
 Archeobot is an operator which provisions Artifactory resources and service elements. It currently provisions service accounts, with private repositories to be added very soon.
 
 Currently, Archeobot lives alongside Artifactory in `devops-artifactory` on the Silver cluster, but will soon live in its own (to be named) namespace on every cluster!
@@ -10,7 +12,7 @@ Support for Artifactory and the Archeobot is provided primarily through the `#ar
 
 ## Relevant Links
 
-If you're looking for more information on Artifactory, check out the [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory) and 
+If you're looking for more information on Artifactory, check out the [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory).
 
 ## Repo Overview
 

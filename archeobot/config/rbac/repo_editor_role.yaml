@@ -10,7 +10,7 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - ArtifactoryRepository
+  - artifactoryrepositories
   verbs:
   - create
   - delete

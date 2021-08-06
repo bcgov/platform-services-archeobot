@@ -41,6 +41,6 @@
   when: repo_permission.status == 404
   changed_when: create_perm.status == 201
 
-- name: Include docker tasks
-  include_tasks: "docker-local.yml"
-  when: repository_type == "docker"
+#- name: Include docker tasks
+#  include_tasks: "docker-local.yml"
+#  when: repository_type == "docker"

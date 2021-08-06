@@ -3,15 +3,19 @@
 - version: v1alpha1
   group: artifactory.devops.gov.bc.ca
   kind: ArtifactoryRepository
-  playbook: playbooks/artrepository-main.yml
+  playbook: playbooks/artrepository-main.yaml
+  vars:
+    meta: '{{ ansible_operator_meta }}'
   finalizer:
     name: finalrepo.artifactory.devops.gov.bc.ca
-    playbook: playbooks/artrepository-destroy.yml
+    playbook: playbooks/artrepository-destroy.yaml
 - version: v1alpha1
   group: artifactory.devops.gov.bc.ca
   kind: ArtifactoryServiceAccount
-  playbook: playbooks/artserviceacct-main.yml
+  playbook: playbooks/artserviceacct-main.yaml
+  vars:
+    meta: '{{ ansible_operator_meta }}'
   finalizer:
     name: finalsvcacct.artifactory.devops.gov.bc.ca
-    playbook: playbooks/artserviceacct-destroy.yml
+    playbook: playbooks/artserviceacct-destroy.yaml
 #+kubebuilder:scaffold:watch

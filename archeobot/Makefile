@@ -28,10 +28,12 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= controller-bundle:$(VERSION)
 
+CLUSTER ?= clab
+
 # Image URL to use all building/pushing image targets
 IMG ?= archeobot:latest
-REGISTRY ?= image-registry.apps.klab.devops.gov.bc.ca
-NAMESPACE ?= devops-artifactory
+REGISTRY ?= image-registry.apps.$(CLUSTER).devops.gov.bc.ca
+NAMESPACE ?= devops-archeobot
 
 all: docker-build
 
@@ -39,22 +41,31 @@ all: docker-build
 run: ansible-operator
 	$(ANSIBLE_OPERATOR) run
 
-# Install CRDs into a cluster
-install: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+# # Install CRDs into a cluster
+# install: kustomize
+# 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+#
+# # Uninstall CRDs from a cluster
+# uninstall: kustomize
+# 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-# Uninstall CRDs from a cluster
-uninstall: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+# Deploy cluster stuff
+cluster-deploy: kustomize
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
+	$(KUSTOMIZE) build config/cluster | kubectl apply -f -
 
-# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+# Undeploy cluster stuff
+cluster-undeploy: kustomize
+	$(KUSTOMIZE) build config/cluster | kubectl delete -f -
+
+# Deploy controller only
 deploy: kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
-	$(KUSTOMIZE) build config/default | kubectl apply -f -
+	$(KUSTOMIZE) build config/deploy/$(CLUSTER) | kubectl apply -f -
 
-# Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
+# Undeploy controller only
 undeploy: kustomize
-	$(KUSTOMIZE) build config/default | kubectl delete -f -
+	$(KUSTOMIZE) build config/deploy/$(CLUSTER) | kubectl delete -f -
 
 # Build the docker image
 docker-build:
