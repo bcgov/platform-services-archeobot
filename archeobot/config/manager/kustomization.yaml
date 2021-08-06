@@ -5,5 +5,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: controller
-  newName: image-registry.apps.klab.devops.gov.bc.ca/devops-archeobot/archeobot
+  newName: image-registry.apps.clab.devops.gov.bc.ca/devops-archeobot/archeobot
   newTag: latest

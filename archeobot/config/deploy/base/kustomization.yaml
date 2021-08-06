@@ -1,0 +1,4 @@
+namespace: devops-archeobot
+namePrefix: archeobot-
+bases:
+- ../../manager

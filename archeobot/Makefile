@@ -28,9 +28,11 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= controller-bundle:$(VERSION)
 
+CLUSTER ?= clab
+
 # Image URL to use all building/pushing image targets
 IMG ?= archeobot:latest
-REGISTRY ?= image-registry.apps.klab.devops.gov.bc.ca
+REGISTRY ?= image-registry.apps.$(CLUSTER).devops.gov.bc.ca
 NAMESPACE ?= devops-archeobot
 
 all: docker-build
@@ -59,11 +61,11 @@ cluster-undeploy: kustomize
 # Deploy controller only
 deploy: kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${REGISTRY}/${NAMESPACE}/${IMG}
-	$(KUSTOMIZE) build config/deploy | kubectl apply -f -
+	$(KUSTOMIZE) build config/deploy/$(CLUSTER) | kubectl apply -f -
 
 # Undeploy controller only
 undeploy: kustomize
-	$(KUSTOMIZE) build config/deploy | kubectl delete -f -
+	$(KUSTOMIZE) build config/deploy/$(CLUSTER) | kubectl delete -f -
 
 # Build the docker image
 docker-build:
