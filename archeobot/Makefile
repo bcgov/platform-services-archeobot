@@ -28,7 +28,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= controller-bundle:$(VERSION)
 
-CLUSTER ?= clab
+CLUSTER ?= klab
 
 # Image URL to use all building/pushing image targets
 IMG ?= archeobot:latest

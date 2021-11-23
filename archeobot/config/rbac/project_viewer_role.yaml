@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: repo-viewer-role
+  name: project-viewer-role
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
@@ -12,7 +12,7 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryrepositories
+  - artifactoryprojects
   verbs:
   - get
   - list
@@ -20,6 +20,6 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryrepositories/status
+  - artifactoryprojects/status
   verbs:
   - get

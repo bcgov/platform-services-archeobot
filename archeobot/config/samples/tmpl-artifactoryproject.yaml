@@ -1,0 +1,27 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: "Template for creating custom resource for Artifactory Project creation"
+  name: artifactory-project-cr-template
+objects:
+- apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+  kind: ArtifactoryProject
+  metadata:
+    name: ${NAME}
+  spec:
+    project_admin: ${ADMIN}
+    description: "${DESCRIPTION}"
+parameters:
+- description: Name for the project
+  displayName: Project name
+  name: NAME
+  value: qa
+- description: Admin user for the project
+  displayName: Project admin
+  name: ADMIN
+  value: caijones@idir
+- description: Description of the project
+  displayName: Project description
+  name: DESCRIPTION
+  value: "this is a description"

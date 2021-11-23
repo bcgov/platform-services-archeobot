@@ -1,0 +1,6 @@
+apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+kind: ArtifactoryProject
+metadata:
+  name: "bar"
+spec:
+  project_admin: "caijones@idir"

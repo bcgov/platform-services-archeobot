@@ -4,7 +4,7 @@
 
 Archeobot is an operator which provisions Artifactory resources and service elements. It currently provisions service accounts, with private repositories to be added very soon.
 
-Currently, Archeobot lives alongside Artifactory in `devops-artifactory` on the Silver cluster, but will soon live in its own (to be named) namespace on every cluster!
+Currently, Archeobot lives in `devops-archeobot` on the Silver cluster. A second operator will be rolled out to Gold soon as well!
 
 ## Contact Info
 
@@ -16,5 +16,5 @@ If you're looking for more information on Artifactory, check out the [BC Gov's A
 
 ## Repo Overview
 
-Tell me where to find important stuff in this repo and provide some info about the layout.
+Documentation is found inside the `docs` folder - if you're here from Platform Ops, you're probably looking for `architecture-documentation`. If you're a user, head over to [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory) and check out the user documentation there!
 

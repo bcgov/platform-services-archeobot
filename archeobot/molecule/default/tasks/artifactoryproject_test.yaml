@@ -1,5 +1,5 @@
 ---
-- name: Create the artifactory.devops.gov.bc.ca/v1alpha1.ArtifactoryRepository
+- name: Create the artifactory.devops.gov.bc.ca/v1alpha1.ArtifactoryProject
   k8s:
     state: present
     namespace: '{{ namespace }}'
@@ -11,7 +11,7 @@
       reason: Successful
       status: "True"
   vars:
-    cr_file: 'artifactory_v1alpha1_artifactoryrepository.yaml'
+    cr_file: 'artifactory_v1alpha1_artifactoryproject.yaml'
 
 - name: Add assertions here
   assert:

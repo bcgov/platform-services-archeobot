@@ -2,13 +2,13 @@
 # Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
   group: artifactory.devops.gov.bc.ca
-  kind: ArtifactoryRepository
-  playbook: playbooks/artrepository-main.yaml
+  kind: ArtifactoryProject
+  playbook: playbooks/artproject-main.yaml
   vars:
     meta: '{{ ansible_operator_meta }}'
   finalizer:
     name: finalrepo.artifactory.devops.gov.bc.ca
-    playbook: playbooks/artrepository-destroy.yaml
+    playbook: playbooks/artproject-destroy.yaml
 - version: v1alpha1
   group: artifactory.devops.gov.bc.ca
   kind: ArtifactoryServiceAccount

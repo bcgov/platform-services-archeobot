@@ -1,0 +1,46 @@
+---
+ # tasks file for artifactory project
+
+- name: Check project existence
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}"
+    method: GET
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    status_code: 200,404
+  register: project_exists
+
+- block:
+  - name: "End play if project already exists"
+    debug:
+      msg: "Project already exists: {{ project_key }}"
+  - meta: end_play
+  when: project_exists.status == 200
+
+- name: Create Project
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects"
+    method: POST
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    body: "{{ lookup('template', 'artproject.json.j2') }}"
+    status_code: 200,201
+  register: project_create
+  changed_when: project_create.status == 201
+    
+- name: Add admin user
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}/users/{{ project_admin }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    body: "{{ lookup('template', 'adminuser.json.j2') }}"
+    status_code: 200,201
+  register: admin_create
+  changed_when: admin_create.status == 201

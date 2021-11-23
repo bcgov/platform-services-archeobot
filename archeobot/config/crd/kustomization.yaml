@@ -3,5 +3,5 @@
 # It should be run by config/default
 resources:
 - bases/artifactory.devops.gov.bc.ca_artifactoryserviceaccounts.yaml
-- bases/artifactory.devops.gov.bc.ca_artifactoryrepositories.yaml
+- bases/artifactory.devops.gov.bc.ca_artifactoryprojects.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
