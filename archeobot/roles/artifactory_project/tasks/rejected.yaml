@@ -1,0 +1,5 @@
+---
+
+- name: The request is rejected, do nothing.
+  debug:
+    msg: "Rejected change waiting on acknowledgement."

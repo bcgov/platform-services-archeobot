@@ -1,0 +1,27 @@
+---
+- hosts:        localhost
+  gather_facts: no
+  vars:
+    meta: '{{ ansible_operator_meta }}'
+  tasks:
+
+    - name: Generate variables
+      set_fact:
+        artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
+        namespace_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
+
+    - name: Set calculated variables
+      set_fact:
+        admin_pass_loc: "{{ testPass | default('/tmp/ansible-operator/admin/password') }}"
+        admin_token_loc: "{{ testToken | default('/tmp/ansible-operator/admin/token') }}"
+
+    - name: Get project object
+      k8s_info:
+        api_version: v1alpha1
+        kind: ArtifactoryProject
+        name: "{{ meta.name }}"
+        namespace: "{{ meta.namespace }}"
+      register: project
+
+    - import_role:
+        name: "artifactory_project_approval"

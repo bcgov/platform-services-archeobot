@@ -2,4 +2,5 @@
 resources:
 - artifactory_v1alpha1_artifactoryserviceaccount.yaml
 - artifactory_v1alpha1_artifactoryproject.yaml
+- artifactory_v1alpha1_artifactoryprojectapproval.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

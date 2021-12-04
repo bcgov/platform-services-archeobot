@@ -11,6 +11,15 @@
     playbook: playbooks/artproject-destroy.yaml
 - version: v1alpha1
   group: artifactory.devops.gov.bc.ca
+  kind: ArtifactoryProjectApproval
+  playbook: playbooks/artprojectapproval-main.yaml
+  vars:
+    meta: '{{ ansible_operator_meta }}'
+#  finalizer:
+#    name: finalprojapp.artifactory.devops.gov.bc.ca
+#    playbook: playbooks/artprojectapproval-destroy.yaml
+- version: v1alpha1
+  group: artifactory.devops.gov.bc.ca
   kind: ArtifactoryServiceAccount
   playbook: playbooks/artserviceacct-main.yaml
   vars:

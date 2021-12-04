@@ -1,0 +1,7 @@
+apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+kind: ArtifactoryProjectApproval
+metadata:
+  name: {{ meta.name }}
+  namespace: {{ meta.namespace }}
+spec:
+  approval_status: {{ new_approval_status }}

@@ -1,0 +1,10 @@
+---
+- set_fact:
+    current_approval_status: "{{ approval.resources[0].spec.approval_status|default('pending') }}"
+    new_approval_status: "nothing-to-approve"
+
+- name: Update the ArtProjApp object to reflect rejection acknowledgement, if appropriate
+  kubernetes.core.k8s:
+    state: present
+    template: 'artprojapp.yaml.j2'
+  when: current_approval_status!="nothing-to-approve"

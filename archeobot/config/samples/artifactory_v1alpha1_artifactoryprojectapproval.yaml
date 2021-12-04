@@ -1,8 +1,6 @@
 apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
-kind: ArtifactoryProject
+kind: ArtifactoryProjectApproval
 metadata:
-  name: bar-sample
+  name: "bar"
 spec:
   approval_status: "nothing-to-approve"
-  key: "bdev"
-  quota_in_Gi: 5

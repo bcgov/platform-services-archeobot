@@ -25,6 +25,9 @@ spec:
             - mountPath: /tmp/ansible-operator/admin/
               name: artifactory-secret
               readOnly: true
+            - mountPath: /tmp/ansible-operator/rocketchat/
+              name: rocketchat-webhook
+              readOnly: true
             - mountPath: /tmp/ansible-operator/runner
               name: runner
           resources:
@@ -32,8 +35,8 @@ spec:
               cpu: 3
               memory: 4Gi
             requests:
-              cpu: 50m
-              memory: 256Mi
+              cpu: 500m
+              memory: 1Gi
           env:
             - name: ANSIBLE_GATHERING
               value: explicit
@@ -41,6 +44,8 @@ spec:
               value: "apps.klab.devops.gov.bc.ca"
             - name: ARTIFACTORY_URL
               value: "https://artifacts.apps.klab.devops.gov.bc.ca"
+            - name: CLUSTER_NAME
+              value: "klab"
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:
@@ -68,3 +73,6 @@ spec:
         - name: artifactory-secret
           secret:
             secretName: artifactory-ha-admin
+        - name: rocketchat-webhook
+          secret:
+            secretName: rocketchat-webhook

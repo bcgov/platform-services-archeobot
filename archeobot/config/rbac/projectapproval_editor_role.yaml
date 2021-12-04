@@ -3,16 +3,14 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: project-editor-role
+  name: projectapproval-editor-role
   labels:
-    rbac.authorization.k8s.io/aggregate-to-admin: "true"
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.devops.gov.bc.ca/aggregate-to-art-objects: "true"
 rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryprojects
+  - artifactoryprojectapprovals
   verbs:
   - create
   - delete
@@ -24,6 +22,6 @@ rules:
 - apiGroups:
   - artifactory.devops.gov.bc.ca
   resources:
-  - artifactoryprojects/status
+  - artifactoryprojectapprovals/status
   verbs:
   - get

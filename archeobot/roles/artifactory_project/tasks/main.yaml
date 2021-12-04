@@ -1,7 +1,15 @@
 ---
  # tasks file for artifactory project
 
-- name: Check project existence
+- set_fact:
+    new_quota: "{{ quota_in_gi | default(5) }}"
+
+- name: Set calculated variables
+  set_fact:
+    project_key: "{{ key | default(gen_key) }}"
+    new_quota_in_bytes: "{{ new_quota|int * 1024 * 1024 * 1024 }}"
+
+- name: Check project status
   uri:
     url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}"
     method: GET
@@ -10,37 +18,21 @@
       Content-type: "application/json"
       Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
     status_code: 200,404
-  register: project_exists
+  register: current_project_status
 
-- block:
-  - name: "End play if project already exists"
-    debug:
-      msg: "Project already exists: {{ project_key }}"
-  - meta: end_play
-  when: project_exists.status == 200
+- set_fact:
+    current_quota: "{{ current_project_status.json.storage_quota_bytes|default(0) / 1024.0 / 1024.0 / 1024.0 }}"
 
-- name: Create Project
-  uri:
-    url: "{{ artifactory_url }}/access/api/v1/projects"
-    method: POST
-    body_format: json
-    headers:
-      Content-type: "application/json"
-      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
-    body: "{{ lookup('template', 'artproject.json.j2') }}"
-    status_code: 200,201
-  register: project_create
-  changed_when: project_create.status == 201
-    
-- name: Add admin user
-  uri:
-    url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}/users/{{ project_admin }}"
-    method: PUT
-    body_format: json
-    headers:
-      Content-type: "application/json"
-      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
-    body: "{{ lookup('template', 'adminuser.json.j2') }}"
-    status_code: 200,201
-  register: admin_create
-  changed_when: admin_create.status == 201
+- name: If the relevant approval object doesn't exist, create it.
+  include_tasks: "create-approval.yaml"
+  when: approval.resources|count == 0
+
+- name: If the ArtProj quota is the same as the current quota, do the status quo tasks.
+  include_tasks: "status-quo.yaml"
+  when: current_quota|int == new_quota|int
+
+- name: Act on the project (or not) depending on the approval status.
+  include_tasks: "{{ approval.resources[0].spec.approval_status|default('pending') }}.yaml"
+  when: current_quota|int != new_quota|int
+
+

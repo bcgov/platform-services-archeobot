@@ -3,34 +3,28 @@
   gather_facts: no
   vars:
     meta: '{{ ansible_operator_meta }}'
-#  collections:
-#    - community.kubernetes
-#    - operator_sdk.util
-  
   tasks:
-#    - name: Setup Testing Variables
-#      include_vars: ../test/test-vars-artifactoryProject.yml
-#      when: meta is undefined
-  
+
     - name: Generate variables
       set_fact:
         artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
+        cluster: "{{ lookup('env', 'CLUSTER_NAME')}}"
         namespace_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
         gen_key: "{{ meta.name | regex_search('^.') }}{{ meta.namespace | regex_search('^...') }}"
+        admin_pass_loc: '/tmp/ansible-operator/admin/password'
+        admin_token_loc: '/tmp/ansible-operator/admin/token'
+        rocketchat_webhook_url_loc: '/tmp/ansible-operator/rocketchat/url'
 
-    - name: Generate variables
-      set_fact:
-        project_key: "{{ key | default(gen_key) }}"
-        approval: "{{ approved | default(false) }}"
-
-    - name: Set calculated variables
-      set_fact:
-        admin_pass_loc: "{{ testPass | default('/tmp/ansible-operator/admin/password') }}"
-        admin_token_loc: "{{ testToken | default('/tmp/ansible-operator/admin/token') }}"
+    - name: Get approval object
+      k8s_info:
+        api_version: v1alpha1
+        kind: ArtifactoryProjectApproval
+        name: "{{ meta.name }}"
+        namespace: "{{ meta.namespace }}"
+      register: approval
 
     - import_role:
         name: "artifactory_project"
-      when: approval
 
     - name: Update CR ArtifactoryProject detail
       k8s:
@@ -43,6 +37,5 @@
             namespace: "{{ meta.namespace }}"
           spec:
             key: "{{ project_key }}"
-            description: "{{ description }}"
-            project_admin: "{{ project_admin }}"
-            approved: "{{ approval }}"
+            quota_in_Gi: "{{ new_quota }}"
+            approval_status: "{{ approval.resources[0].spec.approval_status|default(approval_status) }}"

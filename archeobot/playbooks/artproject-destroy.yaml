@@ -27,6 +27,17 @@
         headers:
           Content-type: "application/json"
           Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
-      ignore_errors: yes
+        status_code: 200,201,404
       register: del_artproj
-      changed_when: del_artproj.status == 200
+      changed_when: del_artproj.status == 200 or del_artproj.status == 404
+      when: key is defined
+
+    - name: Delete ArtifactoryProjectApproval object
+      k8s:
+        state: absent
+        definition:
+          apiVersion: v1alpha1
+          kind: ArtifactoryProjectApproval
+          metadata:
+            name: "{{ meta.name }}"
+            namespace: "{{ meta.namespace }}"

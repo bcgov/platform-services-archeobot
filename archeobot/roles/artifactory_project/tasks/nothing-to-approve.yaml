@@ -1,0 +1,19 @@
+---
+- set_fact:
+    new_approval_status: "pending"
+
+- name: Inform the platform admin team of a new request.
+  uri:
+    url: "{{ lookup('file', '{{ rocketchat_webhook_url_loc }}') }}"
+    method: POST
+    body_format: json
+    headers:
+      Content-type: "application/json"
+    body: "{{ lookup('template', 'notification.json.j2') }}"
+    status_code: 200,201
+  register: notification_sent
+
+- name: Change the status to 'pending'
+  kubernetes.core.k8s:
+    state: present
+    template: 'artprojapp.yaml.j2'

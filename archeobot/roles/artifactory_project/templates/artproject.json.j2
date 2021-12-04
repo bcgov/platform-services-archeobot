@@ -1,6 +1,5 @@
 {
   "display_name": "{{ meta.namespace }}-{{ meta.name }}",
-  "description": "{{ description }}",
   "admin_privileges": {
     "manage_members": true,
     "manage_resources": true,
@@ -8,6 +7,6 @@
     "index_resources": true,
     "allow_ignore_rules": true
   },
-  "storage_quota_bytes": 5368709120,
+  "storage_quota_bytes": {{ new_quota_in_bytes }},
   "project_key": "{{ project_key }}"
 }

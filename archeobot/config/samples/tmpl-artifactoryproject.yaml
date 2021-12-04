@@ -10,18 +10,10 @@ objects:
   metadata:
     name: ${NAME}
   spec:
-    project_admin: ${ADMIN}
-    description: "${DESCRIPTION}"
+    approval_status: nothing-to-approve
 parameters:
 - description: Name for the project
   displayName: Project name
   name: NAME
   value: qa
-- description: Admin user for the project
-  displayName: Project admin
-  name: ADMIN
-  value: caijones@idir
-- description: Description of the project
-  displayName: Project description
-  name: DESCRIPTION
-  value: "this is a description"
+
