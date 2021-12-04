@@ -26,18 +26,28 @@ These are all fully usable the moment the ArtSA object is fully reconciled.
 When creating a project, the CRD accepts the following information:
 
 - a `name` (required)
-- a `admin-username` (required)
-- a description (optional)
 
 It also makes use of the namespace license plate, hereby referred to as `namespace`.
 
-How should we approve the project?
-- we can make a web-based request system where we approve the request and the system reaches out to create the CR in the appropriate namespace.
-- teams can create the CR on their own and we patch it to approve (but then how do they request changes to things like quota?)
-- teams can create one CR called like "ArtifactoryProjectRequest" and have full edit access to that and, once we approve those changes, the operator creates a second one called "ArtifactoryProjectApproved" which actually creates the project.
+When the user creates an ArtifactoryProject, it is assigned a `key` which is the first letter of the name and the first three letters of the namespace - so an Artifactory Project called "test" in "devops-artifactory" would have a key of `tdev`. It is also assigned a quota. 
 
-Once the operator has completed reconciliation of the approval, the following objects will have been created:
+Once the operator has completed reconciliation of the creation of the object, the following will have occurred:
+- an ArtifactoryProjectApproval object with the name `[name]` will have been created in the same namespace.
+- a message will have been sent to the Platform Services team over RocketChat requesting approval for the new object.
 
+The platform team may then either approve or reject the request.
+
+If the request is rejected, the `approval_status` of your ArtifactoryProject object will be updated to indicate the rejection. The rejection may be acknowledged by reverting all changes.
+
+If the request is approved, once the operator has completed reconciliation of the approval, the following objects will have been created:
 - a project in artifactory with a name of the format `[namespace]-[name]`, with the `admin-username` user granted administrative control over the project, with 5GB of quota.
 
 From there, the admin user can perform all the relevant other tasks, such as making new repositories and adding other users (including service accounts) to the project. 
+
+A user may change the quota listed in the ArtifactoryProject object. Doing so triggers another request for approval, with a process effectively identical to the process for approving the creation of a new project.
+
+## Project Approval
+
+A simple object which serves solely as a source of truth for the current approval status of the ArtifactoryProject object with the same name. These objects can be viewed by users, but all CRUD tasks are limited only to the Platform Services team. 
+
+There is a similar `approval_status` field in the ArtifactoryProject object, but this exists solely for the ease of the user - editing this field does nothing and any edits will eventually be replaced by the `approval_status` from the ArtifactoryProjectApproval object.

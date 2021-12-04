@@ -18,3 +18,4 @@ If you're looking for more information on Artifactory, check out the [BC Gov's A
 
 Documentation is found inside the `docs` folder - if you're here from Platform Ops, you're probably looking for `architecture-documentation`. If you're a user, head over to [BC Gov's Artifactory Repo](https://github.com/BCDevOps/developer-experience/tree/master/apps/artifactory) and check out the user documentation there!
 
+operator-sdk create api --group artifactory.devops.gov.bc.ca --version v1alpha1 --kind ArtifactoryProjectApproval --generate-role
