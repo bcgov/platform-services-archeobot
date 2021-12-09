@@ -1,0 +1,43 @@
+---
+- hosts:        localhost
+  gather_facts: no
+  vars:
+    meta: '{{ ansible_operator_meta }}'
+#  collections:
+#    - community.kubernetes
+#    - operator_sdk.util
+  
+  tasks:
+#    - name: Setup Testing Variables
+#      include_vars: ../test/test-vars-artifactoryProject.yml
+#      when: meta is undefined
+  
+    - name: Generate variables
+      set_fact:
+        admin_user: "admin"
+        admin_pass_loc: "{{ testPass | default('/tmp/ansible-operator/admin/password') }}"
+        admin_token_loc: "{{ testToken | default('/tmp/ansible-operator/admin/token') }}"
+        artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
+        namespace_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
+
+    - name: Delete artifactory project
+      uri:
+        url: "{{ artifactory_url }}/access/api/v1/projects/{{ key }}"
+        method: DELETE
+        headers:
+          Content-type: "application/json"
+          Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+        status_code: 200,201,404
+      register: del_artproj
+      changed_when: del_artproj.status == 200 or del_artproj.status == 404
+      when: key is defined
+
+    - name: Delete ArtifactoryProjectApproval object
+      k8s:
+        state: absent
+        definition:
+          apiVersion: v1alpha1
+          kind: ArtifactoryProjectApproval
+          metadata:
+            name: "{{ meta.name }}"
+            namespace: "{{ meta.namespace }}"

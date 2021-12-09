@@ -1,0 +1,25 @@
+---
+
+- name: If the project exists, just update it.
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    body: "{{ lookup('template', 'artproject.json.j2') }}"
+    status_code: 200,201
+  when: current_project_status.status==200
+
+- name: If this is a new project, create it.
+  include_tasks: "create-project.yaml"
+  when: current_project_status.status==404
+
+- set_fact:
+    new_approval_status: "nothing-to-approve"
+
+- name: Change the status to 'nothing-to-approve'
+  kubernetes.core.k8s:
+    state: present
+    template: 'artprojapp.yaml.j2'

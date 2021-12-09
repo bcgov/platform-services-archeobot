@@ -1,0 +1,19 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: "Template for creating custom resource for Artifactory Project creation"
+  name: artifactory-project-cr-template
+objects:
+- apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+  kind: ArtifactoryProject
+  metadata:
+    name: ${NAME}
+  spec:
+    approval_status: nothing-to-approve
+parameters:
+- description: Name for the project
+  displayName: Project name
+  name: NAME
+  value: qa
+

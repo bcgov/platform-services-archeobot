@@ -1,0 +1,41 @@
+---
+- hosts:        localhost
+  gather_facts: no
+  vars:
+    meta: '{{ ansible_operator_meta }}'
+  tasks:
+
+    - name: Generate variables
+      set_fact:
+        artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL')}}"
+        cluster: "{{ lookup('env', 'CLUSTER_NAME')}}"
+        namespace_plate: "{{ meta.namespace | regex_replace('\\-tools$|-dev$|-test$|-prod$', '')}}"
+        gen_key: "{{ meta.name | regex_search('^.') }}{{ meta.namespace | regex_search('^...') }}"
+        admin_pass_loc: '/tmp/ansible-operator/admin/password'
+        admin_token_loc: '/tmp/ansible-operator/admin/token'
+        rocketchat_webhook_url_loc: '/tmp/ansible-operator/rocketchat/url'
+
+    - name: Get approval object
+      k8s_info:
+        api_version: v1alpha1
+        kind: ArtifactoryProjectApproval
+        name: "{{ meta.name }}"
+        namespace: "{{ meta.namespace }}"
+      register: approval
+
+    - import_role:
+        name: "artifactory_project"
+
+    - name: Update CR ArtifactoryProject detail
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1alpha1
+          kind: ArtifactoryProject
+          metadata:
+            name: "{{ meta.name }}"
+            namespace: "{{ meta.namespace }}"
+          spec:
+            key: "{{ project_key }}"
+            quota_in_Gi: "{{ new_quota }}"
+            approval_status: "{{ approval.resources[0].spec.approval_status|default(approval_status) }}"

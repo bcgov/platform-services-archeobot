@@ -1,0 +1,14 @@
+---
+# defaults file for artifactory
+console: ""
+description: ""
+admin_user: admin
+admin_pass_loc: /tmp/ansible-operator/password
+artifactory_namespace: "{{ lookup('env', 'ARTIFACTORY_NAMESPACE')}}"
+external_dns_suffix: "{{ lookup('env', 'ARTIFACTORY_BASE_DNS')}}"
+## For local testing, use external route for artifactory service
+#artifactory_url: https://{{ external_dns_suffix }}
+artifactory_url: "http://artifactory:8081"
+artifactory_project_endpoint: artifactory/api/v1/projects
+artifactory_token_endpoint: artifactory/api/security/token
+quota: "5Gi"

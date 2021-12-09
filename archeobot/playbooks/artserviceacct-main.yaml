@@ -8,9 +8,9 @@
 #    - operator_sdk.util
   
   tasks:
-    - name: Setup Testing Variables
-      include_vars: ../test/test-vars-artifactorySA.yml
-      when: meta is undefined
+#    - name: Setup Testing Variables
+#      include_vars: ../test/test-vars-artifactorySA.yml
+#      when: meta is undefined
 
     - name: Set CR Variables
       set_fact:
@@ -23,10 +23,11 @@
       set_fact:
         service_account_name: "{{ sa_name | default('{{ meta.name }}-{{ project_plate }}-{{ license_plate }}', true) }}"
         generated_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
+        plate: "{{ current_plate | default('{{generated_plate}}') }}"
     
     - import_role:
         name: "artifactory_serviceacct"
-  
+
     - name: Update CR ServiceAccount detail
       k8s:
         state: present
@@ -39,7 +40,7 @@
           spec:
             sa_name: "{{ service_account_name }}"
             descriptor: "{{ descriptor }}"
-            current_plate: "{{ generated_plate }}"
+            current_plate: "{{ plate }}"
       when: (sa_name is not defined) or (sa_name|length == 0) or (current_plate is not defined) or (current_plate|length == 0)
 
   

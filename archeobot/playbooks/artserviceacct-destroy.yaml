@@ -8,9 +8,9 @@
 #    - operator_sdk.util
   
   tasks:
-    - name: Setup Testing Variables
-      include_vars: ../test/test-vars-artifactorySA.yml
-      when: meta is undefined
+#    - name: Setup Testing Variables
+#      include_vars: ../test/test-vars-artifactorySA.yml
+#      when: meta is undefined
 
     - name: Generate variables
       set_fact:
@@ -44,7 +44,7 @@
           apiVersion: v1
           kind: Secret
           metadata:
-            name: "artifacts-{{ meta.name }}-{{ current_plate }}"
+            name: "artifacts-{{ meta.name }}-{{ current_plate|default('none') }}"
             namespace: "{{ meta.namespace }}"
       when: sa_name is defined
 
@@ -55,6 +55,6 @@
           apiVersion: v1
           kind: Secret
           metadata:
-            name: "artifacts-pull-{{ meta.name }}-{{ current_plate }}"
+            name: "artifacts-pull-{{ meta.name }}-{{ current_plate|default('none') }}"
             namespace: "{{ meta.namespace }}"
       when: sa_name is defined

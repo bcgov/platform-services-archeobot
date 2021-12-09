@@ -15,6 +15,8 @@ spec:
               value: apps.klab.devops.gov.bc.ca
             - name: ARTIFACTORY_URL
               value: https://artifacts.apps.klab.devops.gov.bc.ca
+            - name: CLUSTER_NAME
+              value: klab
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:

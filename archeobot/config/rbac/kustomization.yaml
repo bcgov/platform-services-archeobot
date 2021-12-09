@@ -6,7 +6,9 @@ resources:
 # Custom Roles
 - svcacct_viewer_role.yaml
 - svcacct_editor_role.yaml
-- repo_viewer_role.yaml
-- repo_editor_role.yaml
+- project_viewer_role.yaml
+- project_editor_role.yaml
+- projectapproval_viewer_role.yaml
+- projectapproval_editor_role.yaml
 # Rollups
 - object_admin_role.yaml

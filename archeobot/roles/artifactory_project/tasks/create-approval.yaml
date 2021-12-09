@@ -1,0 +1,8 @@
+---
+- set_fact:
+    new_approval_status: "nothing-to-approve"
+
+- name: Create the ArtProjApp object
+  kubernetes.core.k8s:
+    state: present
+    template: 'artprojapp.yaml.j2'

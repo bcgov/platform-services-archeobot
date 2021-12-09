@@ -19,6 +19,14 @@ rules:
       - patch
       - update
       - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - get
+      - list
+      - watch
   ##
   ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryServiceAccount
   ##
@@ -37,14 +45,31 @@ rules:
       - update
       - watch
   ##
-  ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryRepository
+  ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryProject
   ##
   - apiGroups:
       - artifactory.devops.gov.bc.ca
     resources:
-      - artifactoryrepositories
-      - artifactoryrepositories/status
-      - artifactoryrepositories/finalizers
+      - artifactoryprojects
+      - artifactoryprojects/status
+      - artifactoryprojects/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for artifactory.devops.gov.bc.ca/v1alpha1, Kind: ArtifactoryProjectApproval
+  ##
+  - apiGroups:
+      - artifactory.devops.gov.bc.ca
+    resources:
+      - artifactoryprojectapprovals
+      - artifactoryprojectapprovals/status
+      - artifactoryprojectapprovals/finalizers
     verbs:
       - create
       - delete

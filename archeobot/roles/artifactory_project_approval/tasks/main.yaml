@@ -1,0 +1,20 @@
+---
+ # tasks file for artifactory project approval
+
+- debug:
+    msg: "{{approval_status}} -- {{project.resources[0].spec.approval_status}}"
+
+- name: Update CR ArtifactoryProject if approval_status doesn't match that of this approval object.
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1alpha1
+      kind: ArtifactoryProject
+      metadata:
+        name: "{{ meta.name }}"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        key: "{{ project.resources[0].spec.key|default(gen_key) }}"
+        quota_in_Gi: "{{ project.resources[0].spec.quota_in_Gi|default(5) }}"
+        approval_status: "{{ approval_status }}"
+  when: approval_status!=project.resources[0].spec.approval_status

@@ -2,23 +2,23 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: artifactoryrepositories.artifactory.devops.gov.bc.ca
+  name: artifactoryprojectapprovals.artifactory.devops.gov.bc.ca
 spec:
   group: artifactory.devops.gov.bc.ca
   names:
-    kind: ArtifactoryRepository
-    listKind: ArtifactoryRepositoryList
-    plural: artifactoryrepositories
-    singular: artifactoryrepository
+    kind: ArtifactoryProjectApproval
+    listKind: ArtifactoryProjectApprovalList
+    plural: artifactoryprojectapprovals
+    singular: artifactoryprojectapproval
     shortNames:
-      - artrepo
-      - artrepos
+      - artprojapp
+      - artprojapps
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ArtifactoryRepository is the Schema for the artifactoryrepositories API
+        description: ArtifactoryProjectApproval is the Schema for the artifactoryprojectapprovals API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -33,11 +33,11 @@ spec:
           metadata:
             type: object
           spec:
-            description: Spec defines the desired state of ArtifactoryRepository
+            description: Spec defines the desired state of ArtifactoryProjectApproval
             type: object
             x-kubernetes-preserve-unknown-fields: true
           status:
-            description: Status defines the observed state of ArtifactoryRepository
+            description: Status defines the observed state of ArtifactoryProjectApproval
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object

@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       control-plane: controller-manager
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -20,13 +20,23 @@ spec:
           args:
             - "--leader-elect"
             - "--leader-election-id=archeobot"
-            - "--max-concurrent-reconciles=10"
+            - "--max-concurrent-reconciles=5"
           volumeMounts:
             - mountPath: /tmp/ansible-operator/admin/
               name: artifactory-secret
               readOnly: true
+            - mountPath: /tmp/ansible-operator/rocketchat/
+              name: rocketchat-webhook
+              readOnly: true
             - mountPath: /tmp/ansible-operator/runner
               name: runner
+          resources:
+            limits:
+              cpu: 3
+              memory: 4Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
           env:
             - name: ANSIBLE_GATHERING
               value: explicit
@@ -34,6 +44,8 @@ spec:
               value: "apps.klab.devops.gov.bc.ca"
             - name: ARTIFACTORY_URL
               value: "https://artifacts.apps.klab.devops.gov.bc.ca"
+            - name: CLUSTER_NAME
+              value: "klab"
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:
@@ -61,3 +73,6 @@ spec:
         - name: artifactory-secret
           secret:
             secretName: artifactory-ha-admin
+        - name: rocketchat-webhook
+          secret:
+            secretName: rocketchat-webhook

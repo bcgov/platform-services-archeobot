@@ -1,0 +1,42 @@
+---
+
+- name: Create Project
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects"
+    method: POST
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    body: "{{ lookup('template', 'artproject.json.j2') }}"
+    status_code: 200,201
+  register: project_create
+
+- name: Get rolebindings
+  k8s_info:
+    api_version: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    namespace: "{{ meta.namespace }}"
+  register: rolebindings
+
+- name: Filter rolebindings for admins and then pull out names only.
+  set_fact:
+    admin_users: "{{ rolebindings | to_json | from_json | json_query(admin_query) | flatten | json_query(user_query) }}"
+  vars:
+    admin_query: "resources[?starts_with(metadata.name,'admin')].subjects[*]"
+    user_query: "[?kind=='User'].name"
+
+- name: Add admin users
+  uri:
+    url: "{{ artifactory_url }}/access/api/v1/projects/{{ project_key }}/users/{{ project_admin_user }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+      Authorization: "Bearer {{ lookup('file', '{{ admin_token_loc }}') }}"
+    body: "{{ lookup('template', 'adminuser.json.j2') }}"
+    status_code: 200,201,404
+  loop: "{{ admin_users }}"
+  loop_control:
+    loop_var: project_admin_user
+  when: project_create.status == 201

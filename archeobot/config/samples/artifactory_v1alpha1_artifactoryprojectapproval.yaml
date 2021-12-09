@@ -1,0 +1,6 @@
+apiVersion: artifactory.devops.gov.bc.ca/v1alpha1
+kind: ArtifactoryProjectApproval
+metadata:
+  name: "bar"
+spec:
+  approval_status: "nothing-to-approve"
