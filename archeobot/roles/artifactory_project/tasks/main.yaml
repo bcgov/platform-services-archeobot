@@ -22,6 +22,12 @@
 
 - set_fact:
     current_quota: "{{ current_project_status.json.storage_quota_bytes|default(0) / 1024.0 / 1024.0 / 1024.0 }}"
+    approval_object_status: "{{ approval.resources[0].spec.approval_status|default('pending') }}"
+    display_name: "{{ meta.namespace }}-{{ meta.name }}"
+
+- set_fact:
+    approval_object_status: "name-collision"
+  when: current_project_status.status == 200 and current_project_status.json.display_name != display_name
 
 - name: If the relevant approval object doesn't exist, create it.
   include_tasks: "create-approval.yaml"
@@ -32,7 +38,7 @@
   when: current_quota|int == new_quota|int
 
 - name: Act on the project (or not) depending on the approval status.
-  include_tasks: "{{ approval.resources[0].spec.approval_status|default('pending') }}.yaml"
+  include_tasks: "{{ approval_object_status }}.yaml"
   when: current_quota|int != new_quota|int
 
 
