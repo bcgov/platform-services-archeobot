@@ -38,4 +38,4 @@
           spec:
             key: "{{ project_key }}"
             quota_in_Gi: "{{ new_quota }}"
-            approval_status: "{{ approval.resources[0].spec.approval_status|default(approval_status) }}"
+            approval_status: "{{ approval_object_status }}"
