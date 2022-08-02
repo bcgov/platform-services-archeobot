@@ -70,7 +70,7 @@ undeploy: kustomize
 # Build the docker image
 docker-build:
 	docker login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
-	docker build -t ${REGISTRY}/${NAMESPACE}/${IMG} .
+	docker build --platform=linux/amd64 -t ${REGISTRY}/${NAMESPACE}/${IMG} .
 
 # Push the docker image
 docker-push:
@@ -123,4 +123,4 @@ bundle: kustomize
 
 .PHONY: bundle-build ## Build the bundle image.
 bundle-build:
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	docker build --platform=linux/arm64 -f bundle.Dockerfile -t $(BUNDLE_IMG) .
