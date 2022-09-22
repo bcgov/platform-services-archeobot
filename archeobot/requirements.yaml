@@ -1,4 +1,5 @@
 ---
 collections:
+  - cloud.common
   - community.kubernetes
   - operator_sdk.util
