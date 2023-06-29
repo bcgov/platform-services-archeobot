@@ -90,7 +90,7 @@
 
 - name: Make pull secret json
   set_fact:
-    pull_json: '{"auths":{"artifacts.docker.gov.bc.ca":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
+    pull_json: '{"auths":{"artifacts.developer.gov.bc.ca":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
   when: (created_sa.changed)
 
 - name: Cast pull secret json
