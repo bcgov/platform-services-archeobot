@@ -21,9 +21,10 @@
 
 - name: Filter rolebindings for admins and then pull out names only.
   set_fact:
-    admin_users: "{{ rolebindings | to_json | from_json | json_query(admin_query) | flatten | json_query(user_query) }}"
+    admin_users: "{{ rolebindings | to_json | from_json | json_query(admin_query) | json_query(type_query) | flatten | json_query(user_query) }}"
   vars:
-    admin_query: "resources[?starts_with(metadata.name,'admin')].subjects[*]"
+    admin_query: "resources[?roleRef.name=='admin']"
+    type_query: "[?roleRef.kind=='ClusterRole'].subjects[*]"
     user_query: "[?kind=='User'].name"
 
 - name: Add admin users
