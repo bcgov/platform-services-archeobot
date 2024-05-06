@@ -22,6 +22,7 @@
   group: artifactory.devops.gov.bc.ca
   kind: ArtifactoryServiceAccount
   playbook: playbooks/artserviceacct-main.yaml
+  watchDependentResources: True
   vars:
     meta: '{{ ansible_operator_meta }}'
   finalizer:
