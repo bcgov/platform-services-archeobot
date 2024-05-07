@@ -81,7 +81,7 @@
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: (pull_secret_check.resources is defined) and (pull_secret_check[0].data is defined)
+  when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[0].data is defined)
 - name: fail check
   debug: 
     msg: "pull_secret_check failed for resources in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check }}"
