@@ -47,7 +47,7 @@
 - name: Set var for ArtifactoryServiceAccount
   set_fact:
     artifactory_svc_acct_exists: true
-  when: (asa_check.resources is defined) and (asa_check.resources[].spec is defined)
+  when: (asa_check.resources is defined) and (asa_check.resources[0].spec is defined)
 
 # Check Secret
 # ------------
