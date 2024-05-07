@@ -44,7 +44,7 @@
 - name: Set var for ArtifactoryServiceAccount
   set_fact:
     artifactory_svc_acct_exists: true
-  when: asa_check.resources.data and asa_check.resources.data != ''
+  when: (asa_check.resources | length > 0) and asa_check.resources.spec and asa_check.resources.spec != ''
 
 # Check Secret
 # ------------
@@ -58,7 +58,7 @@
 - name: Set var for Secret
   set_fact:
     secret_exists: true
-  when: secret_check.resources.data and secret_check.resources.data != ''
+  when: (secret_check.resources | length > 0) and secret_check.resources.data and secret_check.resources.data != ''
 
 # Check pull Secret
 # -----------------
@@ -75,7 +75,7 @@
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: pull_secret_check.resources.data and pull_secret_check.resources.data != ''
+  when: (pull_secret_check.resources | length > 0) and pull_secret_check.resources.data and pull_secret_check.resources.data != ''
 
 # Stop here if all resources exist
 # --------------------------------
