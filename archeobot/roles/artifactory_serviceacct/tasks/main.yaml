@@ -98,11 +98,11 @@
     debug:
       msg: "Artifactory User already exists for {{ meta.namespace }}: {{ service_account_name }}"
   - meta: end_play
-#  when:
-#    - artifactory_user_exists
-#    - artifactory_svc_acct_exists
-#    - secret_exists
-#    - pull_secret_exists
+  when:
+    - artifactory_user_exists
+    - artifactory_svc_acct_exists
+    - secret_exists
+    - pull_secret_exists
 
 - debug:
     msg: "Reconciling {{ meta.namespace }}"
