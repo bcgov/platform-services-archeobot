@@ -97,6 +97,18 @@
 
 - debug:
     msg: "Reconciling {{ meta.namespace }}"
+- debug: 
+    msg: "Missing Artifactory user for {{ meta.namespace }}: {{ artifactory_user_check.status }}"
+  when: not artifactory_user_exists
+- debug: 
+    msg: "Missing ArtifactoryServiceAccount for {{ meta.namespace }}: {{ asa_check }}"
+  when: not artifactory_svc_acct_exists
+- debug: 
+    msg: "Missing Secret for {{ meta.namespace }}: {{ secret_check }}"
+  when: not secret_exists
+- debug: 
+    msg: "Missing Pull Secret for {{ meta.namespace }}: {{ pull_secret_check }}"
+  when: not pull_secret_exists
 
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
