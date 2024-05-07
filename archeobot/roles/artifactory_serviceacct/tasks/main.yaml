@@ -44,7 +44,7 @@
 - name: Set var for ArtifactoryServiceAccount
   set_fact:
     artifactory_svc_acct_exists: true
-  when: asa_check.resources != ''
+  when: asa_check.resources.data and asa_check.resources.data != ''
 
 # Check Secret
 # ------------
@@ -58,7 +58,7 @@
 - name: Set var for Secret
   set_fact:
     secret_exists: true
-  when: secret_check.resources != ''
+  when: secret_check.resources.data and secret_check.resources.data != ''
 
 # Check pull Secret
 # -----------------
@@ -75,7 +75,7 @@
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: pull_secret_check.resources != ''
+  when: pull_secret_check.resources.data and pull_secret_check.resources.data != ''
 
 # Stop here if all resources exist
 # --------------------------------
@@ -106,9 +106,6 @@
     body: "{{ lookup('template', 'create_account.json.j2') }}"
     force_basic_auth: yes
     status_code: 201
-  register: created_sa
-  changed_when: created_sa.status == 201
-  when: artifactory_user_check.status == 404
 
 - name: Set Secret for Service Account
   k8s:
