@@ -143,8 +143,8 @@
 
 - name: 
   set_fact:
-    plate: asa_check.resources.spec.current_plate
-  when: asa_check.resources.spec.current_plate is defined
+    plate: asa_check.resources[0].spec.current_plate
+  when: asa_check.resources[0].spec.current_plate is defined
 - name:
   debug:
     msg: "Using plate {{ plate }} for {{ meta.namespace }}"
