@@ -64,7 +64,7 @@
 - name: Set var for Secret
   set_fact:
     secret_exists: true
-  when: (secret_check.resources is defined) and (secret_check.resources[].data is defined)
+  when: (secret_check.resources is defined) and (secret_check.resources[0].data is defined)
 
 # Check pull Secret
 # -----------------
@@ -81,15 +81,28 @@
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: (pull_secret_check.resources is defined) and (pull_secret_check[].data is defined)
+  when: (pull_secret_check.resources is defined) and (pull_secret_check[0].data is defined)
 - name: fail check
   debug: 
     msg: "pull_secret_check failed for resources in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check }}"
   when: pull_secret_check.resources is not defined
 - name: fail check 2
   debug: 
-    msg: "pull_secret_check failed for resources[].data in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check.resources }}"
-  when: pull_secret_check.resources[].data is not defined
+    msg: "pull_secret_check failed for resources[0].data in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check.resources }}"
+  when: pull_secret_check.resources[0].data is not defined
+
+- debug: 
+    msg: "Missing Artifactory user for {{ meta.namespace }}: {{ artifactory_user_check.status }}"
+  when: not artifactory_user_exists
+- debug: 
+    msg: "Missing ArtifactoryServiceAccount for {{ meta.namespace }}: {{ asa_check }}"
+  when: not artifactory_svc_acct_exists
+- debug: 
+    msg: "Missing Secret for {{ meta.namespace }}: {{ secret_check }}"
+  when: not secret_exists
+- debug: 
+    msg: "Missing Pull Secret for {{ meta.namespace }}: {{ pull_secret_check }}"
+  when: not pull_secret_exists
 
 # Stop here if all resources exist
 # --------------------------------
@@ -106,18 +119,6 @@
 
 - debug:
     msg: "Reconciling {{ meta.namespace }}"
-- debug: 
-    msg: "Missing Artifactory user for {{ meta.namespace }}: {{ artifactory_user_check.status }}"
-  when: not artifactory_user_exists
-- debug: 
-    msg: "Missing ArtifactoryServiceAccount for {{ meta.namespace }}: {{ asa_check }}"
-  when: not artifactory_svc_acct_exists
-- debug: 
-    msg: "Missing Secret for {{ meta.namespace }}: {{ secret_check }}"
-  when: not secret_exists
-- debug: 
-    msg: "Missing Pull Secret for {{ meta.namespace }}: {{ pull_secret_check }}"
-  when: not pull_secret_exists
 
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
