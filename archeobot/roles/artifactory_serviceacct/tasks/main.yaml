@@ -55,10 +55,14 @@
     name: "artifacts-{{ meta.name }}-{{ plate }}"
     namespace: "{{ meta.namespace }}"
   register: secret_check
+- name: Debug secret_check
+  debug:
+    msg: "DEBUG secret_check: {{ secret_check }}"
 - name: Set var for Secret
   set_fact:
     secret_exists: true
-  when: (secret_check.resources | length > 0) and secret_check.resources.data and secret_check.resources.data != ''
+  #when: (secret_check.resources | length > 0) and secret_check.resources.data and secret_check.resources.data != ''
+  when: (secret_check.resources | length > 0) and (secret_check.resources.data is defined)
 
 # Check pull Secret
 # -----------------
@@ -75,7 +79,8 @@
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: (pull_secret_check.resources | length > 0) and pull_secret_check.resources.data and pull_secret_check.resources.data != ''
+  #when: (pull_secret_check.resources | length > 0) and pull_secret_check.resources.data and pull_secret_check.resources.data != ''
+  when: (pull_secret_check.resources | length > 0) and (pull_secret_check.resources.data is defined)
 
 # Stop here if all resources exist
 # --------------------------------
@@ -84,7 +89,11 @@
     debug:
       msg: "Artifactory User already exists for {{ meta.namespace }}: {{ service_account_name }}"
   - meta: end_play
-  when: artifactory_user_exists and artifactory_svc_acct_exists and secret_exists and pull_secret_exists
+  when:
+    - artifactory_user_exists
+    - artifactory_svc_acct_exists
+    - secret_exists
+    - pull_secret_exists
 
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
