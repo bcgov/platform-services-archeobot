@@ -142,7 +142,7 @@
 
 - name: 
   set_fact:
-    plate: asa_check.resources[0].spec.current_plate
+    plate: "{{ asa_check.resources[0].spec.current_plate }}"
   when: asa_check.resources[0].spec.current_plate is defined
 - name:
   debug:
