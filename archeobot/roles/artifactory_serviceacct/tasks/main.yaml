@@ -69,6 +69,9 @@
     name: "artifacts-pull-{{ meta.name }}-{{ plate }}"
     namespace: "{{ meta.namespace }}"
   register: pull_secret_check
+- name: Debug
+  debug:
+    msg: "pull secret check: {{ pull_secret_check }}"
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
