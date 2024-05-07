@@ -77,18 +77,18 @@
   register: pull_secret_check
 - name: Debug
   debug:
-    msg: "pull secret check: {{ pull_secret_check }}"
+    msg: "pull secret check in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check }}"
 - name: Set var for pull Secret
   set_fact:
     pull_secret_exists: true
-  when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[].data is defined)
+  when: (pull_secret_check.resources is defined) and (pull_secret_check[].data is defined)
 - name: fail check
   debug: 
-    msg: "pull_secret_check failed for resources: {{ pull_secret_check }}"
+    msg: "pull_secret_check failed for resources in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check }}"
   when: pull_secret_check.resources is not defined
 - name: fail check 2
   debug: 
-    msg: "pull_secret_check failed for resources[].data: {{ pull_secret_check.resources }}"
+    msg: "pull_secret_check failed for resources[].data in {{ meta.namespace }} for name artifacts-pull-{{ meta.name }}-{{ plate }}: {{ pull_secret_check.resources }}"
   when: pull_secret_check.resources[].data is not defined
 
 # Stop here if all resources exist
