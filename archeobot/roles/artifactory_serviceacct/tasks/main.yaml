@@ -43,7 +43,7 @@
   register: asa_check
 - name: Debug asa_check
   debug:
-    msg: "DEBUG asa_check: {{ asa_check }}"
+    msg: "DEBUG asa_check for {{ service_account_name }} in {{ meta.namespace }}: {{ asa_check }}"
 - name: Set var for ArtifactoryServiceAccount
   set_fact:
     artifactory_svc_acct_exists: true
@@ -82,6 +82,14 @@
   set_fact:
     pull_secret_exists: true
   when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[].data is defined)
+- name: fail check
+  debug: 
+    msg: "pull_secret_check failed for resources: {{ pull_secret_check }}"
+  when: pull_secret_check.resources is not defined
+- name: fail check 2
+  debug: 
+    msg: "pull_secret_check failed for resources[].data: {{ pull_secret_check }}"
+  when: pull_secret_check.resources[].data is not defined
 
 # Stop here if all resources exist
 # --------------------------------
@@ -90,11 +98,11 @@
     debug:
       msg: "Artifactory User already exists for {{ meta.namespace }}: {{ service_account_name }}"
   - meta: end_play
-  when:
-    - artifactory_user_exists
-    - artifactory_svc_acct_exists
-    - secret_exists
-    - pull_secret_exists
+#  when:
+#    - artifactory_user_exists
+#    - artifactory_svc_acct_exists
+#    - secret_exists
+#    - pull_secret_exists
 
 - debug:
     msg: "Reconciling {{ meta.namespace }}"
