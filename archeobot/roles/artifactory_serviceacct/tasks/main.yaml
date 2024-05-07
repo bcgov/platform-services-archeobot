@@ -15,7 +15,7 @@
 
 # Check Artifactory user
 # ----------------------
-- name: Check artifactory user
+- name: Check for artifactory user
   uri:
     url: "{{ artifactory_url }}/artifactory/api/security/users/{{ service_account_name }}"
     user: "{{ admin_user }}"
@@ -38,12 +38,12 @@
   k8s_info:
     api_version: v1alpha1
     kind: ArtifactoryServiceAccount
-    name: "{{ service_account_name }}"
+    #name: "{{ service_account_name }}"
     namespace: "{{ meta.namespace }}"
   register: asa_check
 - name: Debug asa_check
   debug:
-    msg: "DEBUG asa_check for {{ service_account_name }} in {{ meta.namespace }}: {{ asa_check }}"
+    msg: "DEBUG asa_check in {{ meta.namespace }}: {{ asa_check }}"
 - name: Set var for ArtifactoryServiceAccount
   set_fact:
     artifactory_svc_acct_exists: true
