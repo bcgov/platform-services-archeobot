@@ -12,6 +12,7 @@
     artifactory_svc_acct_exists: false
     secret_exists: false
     pull_secret_exists: false
+    reconciling_msg: []
 
 # Check Artifactory user
 # ----------------------
@@ -78,7 +79,7 @@
 - block:
   - name: "No Action Required"
     debug:
-      msg: "Artifactory User already exists for {{ meta.namespace }}: {{ service_account_name }}"
+      msg: "No action required for {{ meta.namespace }}"
   - meta: end_play
   when:
     - artifactory_user_exists
@@ -86,20 +87,26 @@
     - secret_exists
     - pull_secret_exists
 
-- debug:
-    msg: "Reconciling {{ meta.namespace }}"
-- debug: 
-    msg: "Missing Artifactory user for {{ meta.namespace }}: {{ artifactory_user_check.status }}"
+# Make a tidy report of what's not in sync
+# ----------------------------------------
+- set_fact:
+    reconciling_start: "Reconciling {{ meta.namespace }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + [reconciling_start] }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing Artifactory user'] }}"
   when: not artifactory_user_exists
-- debug: 
-    msg: "Missing ArtifactoryServiceAccount for {{ meta.namespace }}: {{ asa_check }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing ArtifactoryServiceAccount'] }}"
   when: not artifactory_svc_acct_exists
-- debug: 
-    msg: "Missing Secret for {{ meta.namespace }}: {{ secret_check }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing Secret'] }}"
   when: not secret_exists
-- debug: 
-    msg: "Missing Pull Secret for {{ meta.namespace }}: {{ pull_secret_check }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret'] }}"
   when: not pull_secret_exists
+- debug:
+    msg: "{{ reconciling_msg }}"
 
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
