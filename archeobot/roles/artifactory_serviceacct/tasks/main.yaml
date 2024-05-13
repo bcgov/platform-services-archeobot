@@ -108,6 +108,11 @@
 - debug:
     msg: "{{ reconciling_msg }}"
 
+# Testing - don't make any changes, just report the reconciling message above and stop
+# ------------------------------------------------------------------------------------
+- name: Stop here
+  ansible.builtin.meta: end_play
+
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
 - name: Generate Password
