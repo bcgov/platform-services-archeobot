@@ -49,34 +49,32 @@
 # Check Secret
 # ------------
 - name: Check for Secret
-  k8s_info:
+  set_fact:
+    secret_name: "artifacts-{{ meta.name }}-{{ plate }}"
+- k8s_info:
     api_version: v1
     kind: Secret
-    name: "artifacts-{{ meta.name }}-{{ plate }}"
+    name: "{{ secret_name }}"
     namespace: "{{ meta.namespace }}"
   register: secret_check
 - set_fact:
     secret_exists: true
   when: (secret_check.resources is defined) and (secret_check.resources[0].data is defined)
-- set_fact:
-    missing_secret: "artifacts-{{ meta.name }}-{{ plate }}"
-  when: secret_check.resources is not defined
 
 # Check pull Secret
 # -----------------
 - name: Check for pull Secret
-  k8s_info:
+  set_fact:
+    pull_secret_name: "artifacts-pull-{{ meta.name }}-{{ plate }}"
+- k8s_info:
     api_version: v1
     kind: Secret
-    name: "artifacts-pull-{{ meta.name }}-{{ plate }}"
+    name: "{{ pull_secret_name }}"
     namespace: "{{ meta.namespace }}"
   register: pull_secret_check
 - set_fact:
     pull_secret_exists: true
   when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[0].data is defined)
-- set_fact:
-    missing_pull_secret: "artifacts-pull-{{ meta.name }}-{{ plate }}"
-  when: pull_secret_check.resources is not defined
 
 # Stop here if all resources exist
 # --------------------------------
@@ -104,10 +102,10 @@
     reconciling_msg: "{{ reconciling_msg + ['Missing ArtifactoryServiceAccount'] }}"
   when: not artifactory_svc_acct_exists
 - set_fact:
-    reconciling_msg: "{{ reconciling_msg + ['Missing Secret: {{ missing_secret }}'] }}"
+    reconciling_msg: "{{ reconciling_msg + ['Missing Secret: {{ secret_name }}'] }}"
   when: not secret_exists
 - set_fact:
-    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret: {{ missing_pull_secret }}'] }}"
+    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret: {{ pull_secret_name }}'] }}"
   when: not pull_secret_exists
 - debug:
     msg: "{{ reconciling_msg }}"
