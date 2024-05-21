@@ -55,10 +55,12 @@
     name: "artifacts-{{ meta.name }}-{{ plate }}"
     namespace: "{{ meta.namespace }}"
   register: secret_check
-- name: Set var for Secret
-  set_fact:
+- set_fact:
     secret_exists: true
   when: (secret_check.resources is defined) and (secret_check.resources[0].data is defined)
+- set_fact:
+    missing_secret: "artifacts-{{ meta.name }}-{{ plate }}"
+  when: secret_check.resources is not defined
 
 # Check pull Secret
 # -----------------
@@ -69,10 +71,12 @@
     name: "artifacts-pull-{{ meta.name }}-{{ plate }}"
     namespace: "{{ meta.namespace }}"
   register: pull_secret_check
-- name: Set var for pull Secret
-  set_fact:
+- set_fact:
     pull_secret_exists: true
   when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[0].data is defined)
+- set_fact:
+    missing_pull_secret: "artifacts-pull-{{ meta.name }}-{{ plate }}"
+  when: pull_secret_check.resources is not defined
 
 # Stop here if all resources exist
 # --------------------------------
@@ -94,16 +98,16 @@
 - set_fact:
     reconciling_msg: "{{ reconciling_msg + [reconciling_start] }}"
 - set_fact:
-    reconciling_msg: "{{ reconciling_msg + ['Missing Artifactory user'] }}"
+    reconciling_msg: "{{ reconciling_msg + ['Missing Artifactory user '] }}"
   when: not artifactory_user_exists
 - set_fact:
     reconciling_msg: "{{ reconciling_msg + ['Missing ArtifactoryServiceAccount'] }}"
   when: not artifactory_svc_acct_exists
 - set_fact:
-    reconciling_msg: "{{ reconciling_msg + ['Missing Secret'] }}"
+    reconciling_msg: "{{ reconciling_msg + ['Missing Secret: {{ missing_secret }}'] }}"
   when: not secret_exists
 - set_fact:
-    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret'] }}"
+    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret: {{ missing_pull_secret }}'] }}"
   when: not pull_secret_exists
 - debug:
     msg: "{{ reconciling_msg }}"
