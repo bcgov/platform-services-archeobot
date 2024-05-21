@@ -112,7 +112,7 @@
 # ------------------------------------------------------------
 - name: Debug stop
   debug:
-    msg: "Debug mode, not resetting password, stopping"
+    msg: "Debug mode, {{ meta.namespace }} not resetting password, stopping"
 - name: Stop
   ansible.builtin.meta: end_play
 
