@@ -28,6 +28,8 @@
     force_basic_auth: yes
     status_code: 200,404
   register: artifactory_user_check
+- debug:
+    msg: "Artifactory user check status: {{ artifactory_user_check.status }}"
 - name: Set var for artifactory user
   set_fact:
     artifactory_user_exists: true
