@@ -114,11 +114,11 @@
 
 # Testing - don't make any changes, just report what's missing
 # ------------------------------------------------------------
-- name: Debug stop
-  debug:
-    msg: "Debug mode, {{ meta.namespace }} not resetting password, stopping"
-- name: Stop
-  ansible.builtin.meta: end_play
+#- name: Debug stop
+#  debug:
+#    msg: "Debug mode, {{ meta.namespace }} not resetting password, stopping"
+#- name: Stop
+#  ansible.builtin.meta: end_play
 
 # Not all resources are present - generate a password and set all resources
 # -------------------------------------------------------------------------
