@@ -175,7 +175,7 @@
     pull_auth: "{{ pull_auth_decode | b64encode }}"
 - name: Make pull secret json
   set_fact:
-    pull_json: '{"auths":{"{{ external_dns_suffix }}":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
+    pull_json: '{"auths":{"{{ pull_secret_hostname }}":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
 - name: Cast pull secret json
   set_fact:
     cast_json: "{{ pull_json | to_json }}"
