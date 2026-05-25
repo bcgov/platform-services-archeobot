@@ -25,9 +25,6 @@ spec:
             - mountPath: /tmp/ansible-operator/admin/
               name: artifactory-secret
               readOnly: true
-            - mountPath: /tmp/ansible-operator/rocketchat/
-              name: rocketchat-webhook
-              readOnly: true
             - mountPath: /tmp/ansible-operator/runner
               name: runner
           resources:
@@ -46,6 +43,8 @@ spec:
               value: "https://artifacts.apps.klab.devops.gov.bc.ca"
             - name: CLUSTER_NAME
               value: "klab"
+            - name: ARTIFACTORY_APPROVALS_WEBHOOK_URL
+              value: "https://n8n.developer.gov.bc.ca/webhook/7499cb76-ae1d-4f73-9d2f-d67afb9b0158/devx-router/artifactory-project-approvals"
             - name: WATCH_NAMESPACE
             - name: POD_NAME
               valueFrom:
@@ -73,6 +72,3 @@ spec:
         - name: artifactory-secret
           secret:
             secretName: artifactory-ha-admin
-        - name: rocketchat-webhook
-          secret:
-            secretName: rocketchat-webhook
