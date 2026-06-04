@@ -4,7 +4,7 @@
 
 - name: Inform the platform admin team of a new request.
   uri:
-    url: "{{ lookup('file', '{{ rocketchat_webhook_url_loc }}') }}"
+    url: "{{ notification_webhook_url }}"
     method: POST
     body_format: json
     headers:

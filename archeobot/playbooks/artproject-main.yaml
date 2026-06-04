@@ -13,7 +13,7 @@
         gen_key: "{{ meta.name | regex_search('^.') }}{{ meta.namespace | regex_search('^...') }}"
         admin_pass_loc: '/tmp/ansible-operator/admin/password'
         admin_token_loc: '/tmp/ansible-operator/admin/token'
-        rocketchat_webhook_url_loc: '/tmp/ansible-operator/rocketchat/url'
+        notification_webhook_url: "{{ lookup('env', 'ARTIFACTORY_APPROVALS_WEBHOOK_URL') }}"
 
     - name: Get approval object
       k8s_info:
