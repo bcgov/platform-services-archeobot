@@ -12,9 +12,9 @@ spec:
             - name: ANSIBLE_GATHERING
               value: explicit
             - name: ARTIFACTORY_BASE_DNS
-              value: developer.gov.bc.ca
+              value: apps.gold.devops.gov.bc.ca
             - name: ARTIFACTORY_URL
-              value: https://artifacts.developer.gov.bc.ca
+              value: https://artifacts.apps.gold.devops.gov.bc.ca
             - name: CLUSTER_NAME
               value: silver
             - name: WATCH_NAMESPACE
