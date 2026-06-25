@@ -1,7 +1,22 @@
 ---
-  # tasks file for artifactory service account
+# tasks file for artifactory service account
+#
+# Note: APIs are changing in version 7.49.3+ of Artifactory
+#   <7.49.3: https://jfrog.com/help/r/jfrog-rest-apis/deprecated-security-apis
+#  >=7.49.3: https://jfrog.com/help/r/jfrog-rest-apis/scim-for-users
+# Current version, 2024-05: 7.33.12
+# ----------------------------------------------------------------------------
+- name: Set default params
+  set_fact:
+    artifactory_user_exists: false
+    artifactory_svc_acct_exists: false
+    secret_exists: false
+    pull_secret_exists: false
+    reconciling_msg: []
 
-- name: Check artifactory user
+# Check Artifactory user
+# ----------------------
+- name: Check for artifactory user
   uri:
     url: "{{ artifactory_url }}/artifactory/api/security/users/{{ service_account_name }}"
     user: "{{ admin_user }}"
@@ -12,29 +27,108 @@
       Content-type: "application/json"
     force_basic_auth: yes
     status_code: 200,404
-  register: sa_exists
+  register: artifactory_user_check
+- debug:
+    msg: "Artifactory user check status: {{ artifactory_user_check.status }}"
+- name: Set var for artifactory user
+  set_fact:
+    artifactory_user_exists: true
+  when: artifactory_user_check.status == 200
 
+# Check ArtifactoryServiceAccount
+# -------------------------------
+- name: Check for ArtifactoryServiceAccount
+  k8s_info:
+    api_version: v1alpha1
+    kind: ArtifactoryServiceAccount
+    namespace: "{{ meta.namespace }}"
+  register: asa_check
+- name: Set var for ArtifactoryServiceAccount
+  set_fact:
+    artifactory_svc_acct_exists: true
+  when: (asa_check.resources is defined) and (asa_check.resources[0].spec is defined)
+
+# Check Secret
+# ------------
+- name: Check for Secret
+  set_fact:
+    secret_name: "artifacts-{{ meta.name }}-{{ plate }}"
+- k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ secret_name }}"
+    namespace: "{{ meta.namespace }}"
+  register: secret_check
+- set_fact:
+    secret_exists: true
+  when: (secret_check.resources is defined) and (secret_check.resources[0].data is defined)
+
+# Check pull Secret
+# -----------------
+- name: Check for pull Secret
+  set_fact:
+    pull_secret_name: "artifacts-pull-{{ meta.name }}-{{ plate }}"
+- k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ pull_secret_name }}"
+    namespace: "{{ meta.namespace }}"
+  register: pull_secret_check
+- set_fact:
+    pull_secret_exists: true
+  when: (pull_secret_check.resources is defined) and (pull_secret_check.resources[0].data is defined)
+
+# Stop here if all resources exist
+# --------------------------------
 - block:
   - name: "No Action Required"
     debug:
-      msg: "Artifactory User already exists: {{ service_account_name }}"
+      msg: "No action required for {{ meta.namespace }}"
   - meta: end_play
-  when: sa_exists.status == 200
+  when:
+    - artifactory_user_exists
+    - artifactory_svc_acct_exists
+    - secret_exists
+    - pull_secret_exists
 
-  # - name: Check SA k8s secret
-#   k8s_info:
-#     api_version: v1
-#     kind: secret
-#     name: "{{ service_account_name }}"
-#     namespace: "{{ meta.namespace }}"
-#   register: check_sa_secret
+# Make a tidy report of what's not in sync
+# ----------------------------------------
+- set_fact:
+    reconciling_start: "Reconciling {{ meta.namespace }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + [reconciling_start] }}"
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing Artifactory user '] }}"
+  when: not artifactory_user_exists
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing ArtifactoryServiceAccount'] }}"
+  when: not artifactory_svc_acct_exists
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing Secret: {{ secret_name }}'] }}"
+  when: not secret_exists
+- set_fact:
+    reconciling_msg: "{{ reconciling_msg + ['Missing pull Secret: {{ pull_secret_name }}'] }}"
+  when: not pull_secret_exists
+- debug:
+    msg: "{{ reconciling_msg }}"
 
+# Testing - don't make any changes, just report what's missing
+# ------------------------------------------------------------
+#- name: Debug stop
+#  debug:
+#    msg: "Debug mode, {{ meta.namespace }} not resetting password, stopping"
+#- name: Stop
+#  ansible.builtin.meta: end_play
+
+# Not all resources are present - generate a password and set all resources
+# -------------------------------------------------------------------------
 - name: Generate Password
   set_fact:
     generated_password: "{{ lookup('password', '/dev/null length=24 chars=ascii_letters,digits') }}"
-  when: sa_exists.status == 404
 
-- name: Create artifactory user
+# The Artifactory user API will create or update the user
+# -------------------------------------------------------
+- name: Set artifactory user
   uri:
     url: "{{ artifactory_url }}/artifactory/api/security/users/{{ service_account_name }}"
     user: "{{ admin_user }}"
@@ -46,13 +140,15 @@
     body: "{{ lookup('template', 'create_account.json.j2') }}"
     force_basic_auth: yes
     status_code: 201
-  register: created_sa
-  changed_when: created_sa.status == 201
-  when: sa_exists.status == 404
 
-# - name: Change artifactory SA Password
-
-- name: Create Secret for Service Account
+- name: 
+  set_fact:
+    plate: "{{ asa_check.resources[0].spec.current_plate }}"
+  when: asa_check.resources[0].spec.current_plate is defined
+- name:
+  debug:
+    msg: "Using plate {{ plate }} for {{ meta.namespace }}"
+- name: Set Secret for Service Account
   k8s:
     state: present
     definition:
@@ -67,38 +163,23 @@
       data:
         username: "{{ service_account_name | b64encode }}"
         password: "{{ generated_password | b64encode }}"
-  when: created_sa.changed
 
-#- name: Create Pull Secret for Service Account
-#  include_tasks: pull-secret.yaml
-#  with_items:
-#    - "{{ image_registries }}"
-#  loop_control:
-#    loop_var: registry_key
-#  when: (created_sa.changed) and (image_registries is defined)
-
+# Prepare pull secret
+# -------------------
 - name: Set pull secret variables
   set_fact:
     pull_auth_decode: "{{ service_account_name }}:{{ generated_password }}"
     pull_email: "{{ service_account_name }}@{{ meta.namespace }}.local"
-  when: (created_sa.changed)
-
 - name: Set encoded pull secret variables
   set_fact:
     pull_auth: "{{ pull_auth_decode | b64encode }}"
-  when: (created_sa.changed)
-
 - name: Make pull secret json
   set_fact:
-    pull_json: '{"auths":{"artifacts.developer.gov.bc.ca":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
-  when: (created_sa.changed)
-
+    pull_json: '{"auths":{"{{ pull_secret_hostname }}":{"username":"{{ service_account_name }}","password":"{{ generated_password }}","email":"{{ pull_email }}","auth":"{{ pull_auth }}"}}}'
 - name: Cast pull secret json
   set_fact:
     cast_json: "{{ pull_json | to_json }}"
-  when: (created_sa.changed)
-
-- name: Create Pull Secret for Service Account
+- name: Set Pull Secret for Service Account
   k8s:
     state: present
     definition:
@@ -112,24 +193,4 @@
       type: kubernetes.io/dockerconfigjson
       data:
         .dockerconfigjson: "{{ cast_json | b64encode }}"
-  when: (created_sa.changed)
 
-
-
-
-
-# # Generating an admin token (to replace a service account user), requires adding to a group for access controls.
-# - name: Generate admin token
-#   uri:
-#     url: "{{ artifactory_url }}/{{ artifactory_token_endpoint }}"
-#     user: "{{ admin_user }}"
-#     password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
-#     method: POST
-#     headers:
-#       Content-type: "application/x-www-form-urlencoded"
-#     body_format: form-urlencoded
-#     body: '{"username":"{{ service_account_name }}", "expires_in":"0", "scope":"member-of-groups:*", "token_type":"Bearer"}'
-#     force_basic_auth: yes
-#     #status_code: 200
-#   register: token_gen
-#   when: sa_name == ""
