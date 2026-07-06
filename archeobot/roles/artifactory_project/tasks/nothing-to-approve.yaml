@@ -10,10 +10,14 @@
     headers:
       Content-type: "application/json"
     body: "{{ lookup('template', 'notification.json.j2') }}"
-    status_code: 200,201
+    status_code: 200,201,404
   register: notification_sent
 
-- name: Change the status to 'pending'
+- set_fact:
+    new_approval_status: "pending-contactplatformservices"
+  when: notification_sent.status == 404
+
+- name: Change the status to 'pending' or 'pending-contactplatformservices'
   kubernetes.core.k8s:
     state: present
     template: 'artprojapp.yaml.j2'

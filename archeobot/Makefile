@@ -71,11 +71,17 @@ undeploy: kustomize
 docker-build:
 	docker login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
 	docker build --platform=linux/amd64 -t ${REGISTRY}/${NAMESPACE}/${IMG} .
+podman-build:
+	podman login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
+	podman build --platform=linux/amd64 -t ${REGISTRY}/${NAMESPACE}/${IMG} .
 
 # Push the docker image
 docker-push:
 	docker login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
 	docker push ${REGISTRY}/${NAMESPACE}/${IMG}
+podman-push:
+	podman login ${REGISTRY} -u $(shell oc whoami) -p $(shell oc whoami -t)
+	podman push ${REGISTRY}/${NAMESPACE}/${IMG}
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/')
